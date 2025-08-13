@@ -58,5 +58,5 @@ func unregisterForEvent(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{"message": "Event Cancelled"})
+	context.JSON(http.StatusOK, gin.H{"message": "Event Cancelled"})
 }
