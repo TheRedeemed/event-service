@@ -14,8 +14,6 @@ type Event struct {
 	UserId      int64
 }
 
-// var events = []Event{}
-
 func (event *Event) Save() error {
 	query := `
 	INSERT INTO events(name, description, location, dateTime, user_id)
@@ -109,5 +107,34 @@ func (event Event) DeleteEvent() error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(event.Id)
+	return err
+}
+
+func (event *Event) RegisterForEvent(userId int64) error {
+	query := `
+		INSERT INTO registrations(event_id, user_id)
+		VALUES (?,?)
+	`
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.Id, userId)
+	return err
+}
+
+func (event *Event) CancelRegisteration(userId int64) error {
+	query := "DELETE FROM registrations WHERE event_id = ? AND user_id = ?"
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.Id, userId)
 	return err
 }

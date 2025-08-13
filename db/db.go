@@ -45,9 +45,20 @@ func createTables() {
 		)
 	`
 
+	createRegistrationsTable := `
+		CREATE TABLE IF NOT EXISTS registrations (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			event_id INTEGER,
+			user_id INTEGER,
+			FOREIGN KEY (event_id) REFERENCES events(id),
+			FOREIGN KEY (user_id) REFERENCES users(id)
+		)
+	`
+
 	createTablesQueries := map[string]string{
-		"Users":  createUsersTable,
-		"Events": createEventsTable,
+		"Users":         createUsersTable,
+		"Events":        createEventsTable,
+		"Registrations": createRegistrationsTable,
 	}
 
 	for tableName, query := range createTablesQueries {
